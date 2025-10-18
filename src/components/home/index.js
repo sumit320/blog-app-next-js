@@ -71,6 +71,8 @@ export default function HomeComponent({ posts }) {
                     <Image
                       src={postItem?.coverImage}
                       alt={postItem?.title}
+                      width={800} 
+                      height={400} 
                       className="w-full h-full object-cover"
                     />
                   </div>

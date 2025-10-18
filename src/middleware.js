@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyAuth } from "./lib/auth";
 
-
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|healthz).*)"],
 };

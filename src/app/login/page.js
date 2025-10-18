@@ -44,6 +44,7 @@ export default async function LoginPage() {
         <Image
           src="/images/auth.jpg"
           alt="workspace"
+          fill
           className="absolute inset-0 object-cover w-full h-full"
         />
 
