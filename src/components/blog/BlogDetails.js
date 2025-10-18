@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addCommentAction } from "@/actions/blogInteractions";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const schema = z.object({
   content: z.string().min(1, "Comment is required"),
@@ -62,7 +63,7 @@ function BlogDetails({ post }) {
         </div>
       </header>
       {post?.coverImage && (
-        <img
+        <Image
           src={post?.coverImage}
           className="w-full h-96 object-cover rounded-lg mb-8"
         />

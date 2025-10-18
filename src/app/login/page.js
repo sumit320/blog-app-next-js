@@ -26,7 +26,7 @@ export default async function LoginPage() {
           <LoginForm />
 
           <p className="text-center text-sm text-gray-600">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link
               className="font-semibold text-black hover:text-gray-700 ml-2"
               href={"/register"}
