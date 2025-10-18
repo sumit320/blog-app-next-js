@@ -21,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { searchPostsAction } from "@/actions/blogInteractions";
+import Image from "next/image";
 
 const searchSchema = z.object({
   query: z.string().min(1, "Please enter a search term"),
@@ -166,7 +167,7 @@ export default function Header({ user }) {
                   }}
                   className="cursor-pointer flex gap-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
                 >
-                  <img
+                  <Image
                     src={item.coverImage}
                     alt={item.title}
                     className="w-1/3 h-28 object-cover"

@@ -1,5 +1,6 @@
 import LoginForm from "@/components/Layout/auth/LoginForm";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -40,7 +41,7 @@ export default async function LoginPage() {
       {/* Right Side - Image with Text */}
       <div className="hidden md:flex w-1/2 p-12 items-center justify-center relative bg-cover bg-center overflow-hidden">
         {/* Background Image */}
-        <img
+        <Image
           src="/images/auth.jpg"
           alt="workspace"
           className="absolute inset-0 object-cover w-full h-full"

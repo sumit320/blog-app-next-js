@@ -6,6 +6,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { BLOG_CATEGORIES } from "@/lib/config";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function HomeComponent({ posts }) {
   const [isGridView, setIsGridView] = useState(false);
@@ -67,7 +68,7 @@ export default function HomeComponent({ posts }) {
                       isGridView ? "w-full h-48" : "w-1/3 h-full"
                     } relative`}
                   >
-                    <img
+                    <Image
                       src={postItem?.coverImage}
                       alt={postItem?.title}
                       className="w-full h-full object-cover"
