@@ -1,9 +1,15 @@
 "use client";
 
-import { Edit, LogOut, Search, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +19,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { logoutUserAction } from "@/actions/logout";
-import * as z from "zod";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+
+import { Edit, LogOut, Loader2, Search } from "lucide-react";
+import { logoutUserAction } from "@/actions/logout";
 import { searchPostsAction } from "@/actions/blogInteractions";
-import Image from "next/image";
 
 const searchSchema = z.object({
   query: z.string().min(1, "Please enter a search term"),
@@ -33,12 +35,11 @@ export default function Header({ user }) {
   const [searchResults, setSearchResults] = useState([]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  console.log(user, "user");
-
   const { register, handleSubmit, reset } = useForm({
     resolver: zodResolver(searchSchema),
   });
 
+  // --- Search Handler ---
   async function onSearchSubmit(data) {
     setIsLoading(true);
     try {
@@ -57,6 +58,7 @@ export default function Header({ user }) {
     }
   }
 
+  // --- Logout Handler ---
   async function handleLogout() {
     try {
       const result = await logoutUserAction();
@@ -85,7 +87,7 @@ export default function Header({ user }) {
 
             {/* Actions */}
             <div className="flex items-center space-x-4">
-              {/* Search */}
+              {/* Search Form */}
               <form
                 className="relative hidden md:block"
                 onSubmit={handleSubmit(onSearchSubmit)}
@@ -106,7 +108,7 @@ export default function Header({ user }) {
                 )}
               </form>
 
-              {/* Create Blog */}
+              {/* Create Blog Button */}
               <Button
                 onClick={() => router.push("/blog/create")}
                 variant="ghost"
@@ -117,30 +119,35 @@ export default function Header({ user }) {
                 <Edit className="h-6 w-6" />
               </Button>
 
-              {/* Avatar Menu */}
+              {/* User Avatar Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar
                     className="h-8 w-8 cursor-pointer"
-                    aria-label={`User avatar for ${user?.name || "User"}`}
+                    aria-label={`User avatar for ${user?.userName || "User"}`}
                   >
                     <AvatarImage
-                      src={"https://github.com/shadcn.png"}
+                      src="https://github.com/shadcn.png"
+                      alt={`Avatar of ${user?.userName || "User"}`}
                     />
                     <AvatarFallback>
-                      {user?.userName ? user.userName[0].toUpperCase() : "U"}
+                      {user?.userName
+                        ? user.userName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        : "U"}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>
                     Signed in as {user?.userName || "User"}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Log Out
+                    <LogOut className="h-4 w-4 mr-2" /> Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -149,7 +156,7 @@ export default function Header({ user }) {
         </div>
       </div>
 
-      {/* Search Results */}
+      {/* Search Results Sheet */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent side="right" className="w-full sm:w-[540px]">
           <SheetHeader>
@@ -167,17 +174,23 @@ export default function Header({ user }) {
                   }}
                   className="cursor-pointer flex gap-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
                 >
-                  <Image
-                    src={item.coverImage}
-                    alt={item.title}
-                    className="w-1/3 h-28 object-cover"
-                  />
+                  {/* Image Wrapper */}
+                  <div className="w-1/3 h-28 relative flex-shrink-0">
+                    <Image
+                      src={item.coverImage}
+                      alt={item.title}
+                      fill
+                      className="object-cover rounded-l-lg"
+                    />
+                  </div>
+
                   <div className="flex-1 p-3">
                     <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
                       {item.title}
                     </h3>
+                    {/* Hydration-safe date */}
                     <p className="text-sm text-gray-500 mt-1">
-                      {new Date(item.createdAt).toLocaleDateString()}
+                      {new Date(item.createdAt).toDateString()}
                     </p>
                   </div>
                 </article>
