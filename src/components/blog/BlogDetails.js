@@ -17,7 +17,7 @@ const schema = z.object({
 });
 
 function BlogDetails({ post }) {
-//   console.log(post, "post in blog details page");
+  //   console.log(post, "post in blog details page");
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm({
     resolver: zodResolver(schema),
@@ -64,6 +64,7 @@ function BlogDetails({ post }) {
       </header>
       {post?.coverImage && (
         <Image
+          alt={post.title || "Blog cover image"}
           src={post?.coverImage}
           className="w-full h-96 object-cover rounded-lg mb-8"
         />
