@@ -1,5 +1,3 @@
-import { createMiddleware } from "@arcjet/next";
-import aj from "./lib/arcjet";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyAuth } from "./lib/auth";
@@ -8,14 +6,8 @@ export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|healthz).*)"],
 };
 
-const arcjetMiddleware = createMiddleware(aj);
-
 export async function middleware(request) {
-  const arcjetResponse = await arcjetMiddleware(request);
-  let response = NextResponse.next();
-
-  //protected routes list
-  const protectedRoutes = ["/"];
+  const protectedRoutes = ["/"]; // add other protected routes
 
   const isProtectedRoute = protectedRoutes.some(
     (route) =>
@@ -28,23 +20,11 @@ export async function middleware(request) {
     const user = token ? await verifyAuth(token) : null;
 
     if (!user) {
-      if (request.nextUrl.pathname !== "/login") {
-        const loginUrl = new URL("/login", request.url);
-        loginUrl.searchParams.set("from", request.nextUrl.pathname);
-        response = NextResponse.redirect(loginUrl);
-      }
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("from", request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
     }
   }
 
-  if (arcjetResponse && arcjetResponse.headers) {
-    arcjetResponse.headers.forEach((value, key) => {
-      response.headers.set(key, value);
-    });
-  }
-
-  if (arcjetResponse && arcjetResponse.status !== 200) {
-    return arcjetResponse;
-  }
-
-  return response;
+  return NextResponse.next();
 }
