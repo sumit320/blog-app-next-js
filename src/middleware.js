@@ -7,7 +7,7 @@ export const config = {
 };
 
 export async function middleware(request) {
-  const protectedRoutes = ["/"]; // add other protected routes
+  const protectedRoutes = ["/"]; 
 
   const isProtectedRoute = protectedRoutes.some(
     (route) =>

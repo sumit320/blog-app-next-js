@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["ho5nqy8lu2.ufs.sh"], // add your external image host(s)
+    domains: ["ho5nqy8lu2.ufs.sh"], 
   },
 };
 
-export default nextConfig; // <-- ESM export
+export default nextConfig; 
